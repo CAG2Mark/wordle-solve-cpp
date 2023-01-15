@@ -9,6 +9,7 @@
 class WordleGame {
 private:
     std::vector<std::set<int>> boards;
+    std::vector<bool> solved;
     const WordleData *data;
 
 public:
@@ -18,6 +19,10 @@ public:
     std::string get_solved_word();
     void filter_words(std::string word, const std::vector<int> &results);
     double compute_entropy(int word) const;
+    
+    std::vector<bool> get_solved() const;
+
+    bool is_invalid() const;
 };
 
 #endif

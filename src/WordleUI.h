@@ -7,16 +7,17 @@
 #include <string>
 #include <vector>
 
-
 class WordleUI {
     WordleGame game;
     const WordleData *data;
 
     std::vector<std::string> guesses;
-    std::vector<std::vector<std::string>> results;
+    std::vector<std::vector<std::string>> results_log;
+
+    std::vector<int> solved_turn;
 
     int last_height = 0;
-    bool cleared = false;
+    bool cleared = true;
 
     size_t boards;
 
@@ -25,12 +26,9 @@ class WordleUI {
     void print_board(size_t highlighted = -1);
 
 public:
-    WordleUI(int boards, const WordleData *data) : game(boards, data) {
-        this->data = data;
-        this->boards = boards;
-    }
+    WordleUI(int boards, const WordleData *data);
 
-    void start_game();
+    void run();
 };
 
 #endif

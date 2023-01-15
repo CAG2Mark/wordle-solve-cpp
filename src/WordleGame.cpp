@@ -6,7 +6,8 @@
 const std::string BEST_START = "slate";
 using namespace std;
 
-WordleGame::WordleGame(int num_boards, const WordleData *data) {
+WordleGame::WordleGame(int num_boards, const WordleData *data) :
+    solved(num_boards, false) {
     this->data = data;
 
     boards.resize(num_boards);
@@ -64,8 +65,9 @@ string WordleGame::get_best_word() const {
     }
 
     for (int i = 0; i < data->size(); ++i) {
-        if (merged.find(i) != merged.end()) continue;
-        
+        if (merged.find(i) != merged.end())
+            continue;
+
         double entropy = compute_entropy(i);
 
         if (entropy <= max_entropy)
@@ -79,10 +81,18 @@ string WordleGame::get_best_word() const {
 }
 
 string WordleGame::get_solved_word() {
-    for (auto &s : boards) {
-        if (s.size() != 1) continue;
+    for (size_t i = 0; i < boards.size(); ++i) {
+        auto &s = boards[i];
+
+        if (s.size() != 1)
+            continue;
+        if (solved[i])
+            continue;
+
+        solved[i] = true;
+
         string ret = data->itow(*s.begin());
-        s.clear();
+
         return ret;
     }
     return "";
@@ -90,10 +100,12 @@ string WordleGame::get_solved_word() {
 
 void WordleGame::filter_words(std::string word, const vector<int> &results) {
     int w = data->wtoi(word);
-    cout << boards[0].size() << "\n";
     for (size_t i = 0; i < boards.size(); ++i) {
+        if (solved[i])
+            continue;
+
         auto &s = boards[i];
-        
+
         for (auto it = s.begin(); it != s.end();) {
             int w_ = *it;
             if (data->get_guess_table()[w][w_] != results[i])
@@ -103,3 +115,14 @@ void WordleGame::filter_words(std::string word, const vector<int> &results) {
         }
     }
 }
+
+bool WordleGame::is_invalid() const {
+    vector<bool> ret;
+    for (const auto &s : boards)
+        if (s.size() == 0)
+            return false;
+
+    return false;
+}
+
+std::vector<bool> WordleGame::get_solved() const { return solved; }

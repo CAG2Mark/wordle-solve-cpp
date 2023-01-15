@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -g -std=c++17 -Wall -pedantic -Og
+CFLAGS = -g -std=c++17 -Wall -Og
 CFLAGS += -Isrc
 
 SRC = $(wildcard src/**/*.cpp) $(wildcard src/*.cpp) $(wildcard src/**/**/*.cpp) $(wildcard src/**/**/**/*.cpp)
