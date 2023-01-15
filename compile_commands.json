@@ -1,0 +1,56 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-g",
+      "-std=c++17",
+      "-Wall",
+      "-pedantic",
+      "-Ofast",
+      "-Isrc",
+      "-o",
+      "src/main.o",
+      "src/main.cpp"
+    ],
+    "directory": "/storage/mark/Repos/quordle-cpp",
+    "file": "/storage/mark/Repos/quordle-cpp/src/main.cpp",
+    "output": "/storage/mark/Repos/quordle-cpp/src/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-g",
+      "-std=c++17",
+      "-Wall",
+      "-pedantic",
+      "-Ofast",
+      "-Isrc",
+      "-o",
+      "src/WordleData.o",
+      "src/WordleData.cpp"
+    ],
+    "directory": "/storage/mark/Repos/quordle-cpp",
+    "file": "/storage/mark/Repos/quordle-cpp/src/WordleData.cpp",
+    "output": "/storage/mark/Repos/quordle-cpp/src/WordleData.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-g",
+      "-std=c++17",
+      "-Wall",
+      "-pedantic",
+      "-Ofast",
+      "-Isrc",
+      "-o",
+      "src/WordleGame.o",
+      "src/WordleGame.cpp"
+    ],
+    "directory": "/storage/mark/Repos/quordle-cpp",
+    "file": "/storage/mark/Repos/quordle-cpp/src/WordleGame.cpp",
+    "output": "/storage/mark/Repos/quordle-cpp/src/WordleGame.o"
+  }
+]

@@ -1,0 +1,2 @@
+{ BasedOnStyle: WebKit, BreakBeforeBraces: Attach, SeparateDefinitionBlocks : Always, ColumnLimit: 80, PointerAlignment: Right, AlwaysBreakTemplateDeclarations: Yes, 
+AllowShortBlocksOnASingleLine: Empty, PackConstructorInitializers: NextLine, BreakConstructorInitializers: AfterColon, BreakBeforeBinaryOperators: NonAssignment }

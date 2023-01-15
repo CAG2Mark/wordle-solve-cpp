@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "make",
+            "args":[
+                "main",
+                "-j8"
+            ],
+            "group": "build",
+        }
+    ]
+}
