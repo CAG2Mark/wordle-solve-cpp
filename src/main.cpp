@@ -13,13 +13,16 @@ int main() {
     bool play = true;
     while (play) {
         int boards;
+        int cols;
         cout << "Enter the number of boards: ";
         cin >> boards;
+        cout << "Enter the number of columns: ";
+        cin >> cols;
         string dummy;
         getline(cin, dummy);
         cout << "\n\n";
 
-        WordleUI ui(boards, &a);
+        WordleUI ui(boards, cols, &a);
         ui.run();
         cout << "\n\n";
         char yn;

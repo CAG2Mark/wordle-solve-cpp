@@ -45,6 +45,10 @@ double WordleGame::compute_entropy(int word) const {
 }
 
 string WordleGame::get_best_word() const {
+    if (first) {
+        return BEST_START;
+    }
+
     double max_entropy = -1;
     int best_word = -1;
 
@@ -99,6 +103,8 @@ string WordleGame::get_solved_word() {
 }
 
 void WordleGame::filter_words(std::string word, const vector<int> &results) {
+    first = false;
+    
     int w = data->wtoi(word);
     for (size_t i = 0; i < boards.size(); ++i) {
         if (solved[i])

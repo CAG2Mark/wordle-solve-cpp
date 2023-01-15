@@ -11,6 +11,7 @@ private:
     std::vector<std::set<int>> boards;
     std::vector<bool> solved;
     const WordleData *data;
+    bool first = true;
 
 public:
     WordleGame(int num_boards, const WordleData *data);

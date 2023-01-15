@@ -19,6 +19,8 @@ class WordleUI {
     int last_height = 0;
     bool cleared = true;
 
+    size_t cols;
+
     size_t boards;
 
     void clear_board();
@@ -26,7 +28,7 @@ class WordleUI {
     void print_board(size_t highlighted = -1);
 
 public:
-    WordleUI(int boards, const WordleData *data);
+    WordleUI(int boards, int cols, const WordleData *data);
 
     void run();
 };

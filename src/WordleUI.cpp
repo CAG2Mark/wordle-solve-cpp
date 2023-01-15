@@ -5,8 +5,6 @@ using namespace std;
 
 const size_t MIN_BOARD_HEIGHT = 6;
 
-const size_t COLS = 4;
-
 const size_t PAD_X = 2;
 const size_t PAD_Y = 1;
 
@@ -34,12 +32,13 @@ enum BACKGROUND {
     BG_WHITE = 47
 };
 
-WordleUI::WordleUI(int boards, const WordleData *data) :
+WordleUI::WordleUI(int boards, int cols, const WordleData *data) :
     game(boards, data),
     results_log(boards, std::vector<std::string>()),
     solved_turn(boards, -1) {
     this->data = data;
     this->boards = boards;
+    this->cols = cols;
 }
 
 string colorize(string inp, FOREGROUND fg, bool bold = false) {
@@ -90,22 +89,22 @@ void WordleUI::clear_board() {
 void WordleUI::print_board(size_t highlighted) {
     clear_board();
 
-    size_t ROWS = (boards + COLS - 1) / COLS;
+    size_t rows = (boards + cols - 1) / cols;
 
-    size_t BOARD_HEIGHT = max(MIN_BOARD_HEIGHT, guesses.size() + 1);
-    size_t LINES = (BOARD_HEIGHT + 2 * PAD_Y) * ROWS;
+    size_t board_height = max(MIN_BOARD_HEIGHT, guesses.size() + 1);
+    size_t lines = (board_height + 2 * PAD_Y) * rows;
 
-    size_t WIDTH = (5 + 2 * PAD_X) * COLS;
-    WIDTH = max((size_t)100, WIDTH);
+    size_t width = (5 + 2 * PAD_X) * cols;
+    width = max((size_t)100, width);
 
-    vector<vector<string>> out(LINES, vector<string>(WIDTH, " "));
+    vector<vector<string>> out(lines, vector<string>(width, " "));
 
-    for (size_t i = 0; i < ROWS; ++i) {
-        for (size_t j = 0; j < COLS && i * COLS + j < boards; ++j) {
-            size_t board = i * COLS + j;
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols && i * cols + j < boards; ++j) {
+            size_t board = i * cols + j;
 
             size_t corner_x = PAD_X + (5 + 2 * PAD_X) * j;
-            size_t corner_y = PAD_Y + (BOARD_HEIGHT + 2 * PAD_Y) * i;
+            size_t corner_y = PAD_Y + (board_height + 2 * PAD_Y) * i;
 
             for (size_t k = 0; k < guesses.size(); ++k) {
                 if (k > (size_t) solved_turn[board]) break;
@@ -140,7 +139,7 @@ void WordleUI::print_board(size_t highlighted) {
         cout << "\n";
     }
 
-    last_height += LINES;
+    last_height += lines;
     cleared = false;
 }
 
