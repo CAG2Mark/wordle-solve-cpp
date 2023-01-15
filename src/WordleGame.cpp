@@ -104,13 +104,15 @@ string WordleGame::get_solved_word() {
 
 void WordleGame::filter_words(std::string word, const vector<int> &results) {
     first = false;
-    
+
     int w = data->wtoi(word);
     for (size_t i = 0; i < boards.size(); ++i) {
         if (solved[i])
             continue;
 
         auto &s = boards[i];
+
+        if (results[i] == 242) solved[i] = true;
 
         for (auto it = s.begin(); it != s.end();) {
             int w_ = *it;

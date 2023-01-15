@@ -249,6 +249,10 @@ void WordleUI::run() {
 
         game.filter_words(word, results);
 
+        for (size_t i = 0; i < results.size(); ++i) {
+            if (results[i] == 242) solved_turn[i] = turn;
+        }
+
         ++turn;
 
         if (!any_of(solved.begin(), solved.end(), [](bool b) { return !b; })) {
