@@ -21,9 +21,10 @@ WordleGame::WordleGame(int num_boards, const WordleData *data) :
 double WordleGame::compute_entropy(int word) const {
     auto &guess_table = data->get_guess_table();
 
-    int arrangs[243] = { 0 };
-    int total = 0;
+    double entropy = 0;
     for (const auto &s : boards) {
+        int total = 0;
+        int arrangs[243] = { 0 };
         for (int ans : s) {
             int res = guess_table[word][ans];
             if (res >= 243) {
@@ -32,14 +33,13 @@ double WordleGame::compute_entropy(int word) const {
             ++arrangs[res];
         }
         total += s.size();
-    }
 
-    double entropy = 0;
-    for (int i = 0; i < 243; ++i) {
-        if (arrangs[i] == 0)
-            continue;
-        double p = (double)arrangs[i] / total;
-        entropy -= p * log2(p);
+        for (int i = 0; i < 243; ++i) {
+            if (arrangs[i] == 0)
+                continue;
+            double p = (double)arrangs[i] / total;
+            entropy -= p * log2(p);
+        }
     }
     return entropy;
 }
@@ -112,7 +112,8 @@ void WordleGame::filter_words(std::string word, const vector<int> &results) {
 
         auto &s = boards[i];
 
-        if (results[i] == 242) solved[i] = true;
+        if (results[i] == 242)
+            solved[i] = true;
 
         for (auto it = s.begin(); it != s.end();) {
             int w_ = *it;

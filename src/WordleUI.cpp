@@ -87,8 +87,6 @@ void WordleUI::clear_board() {
 }
 
 void WordleUI::print_board(size_t highlighted) {
-    clear_board();
-
     size_t rows = (boards + cols - 1) / cols;
 
     size_t board_height = max(MIN_BOARD_HEIGHT, guesses.size() + 1);
@@ -172,6 +170,7 @@ void WordleUI::run() {
             cout << "Game is invalid. Exiting.\n";
             return;
         }
+
         string word = game.get_best_word();
         string solve = game.get_solved_word();
 
@@ -199,6 +198,11 @@ void WordleUI::run() {
 
             for (size_t j = 0; j < boards && solved[i]; i = (i + 1) % boards, ++j) {};
 
+            clear_board();
+            cout << "\nGUESS: " << word << " (Entropy: " << game.compute_entropy(data->wtoi(word)) << ")";
+            print_spaces(20);
+            cout << "\n";
+            last_height += 2;
             print_board(i);
             string res;
             cout << "Inputting result for board " << i
