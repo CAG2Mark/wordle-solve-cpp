@@ -8,7 +8,7 @@ C++ solver for Wordle that I wrote out of boredom. Main features include:
 
 ## How does it work?
 
-At its heart, this just uses information theory to get the best guess, like many other solvers. In the case of multiple boards, note that we can add up the entropy of multiple boards to compute the total entropy.
+Just like many other solvers, this just uses information theory to get the best guess. In the case of multiple boards, note that we can add up the entropy of multiple boards to compute the total entropy if we assume the boards act independently. In reality this may not be the case. For example, some implementations may require that different boards do not share the same answer, but it should be good enough.
 
 The main optimisation is to first pre-compute the guess colours. For every word that could be an answer, the guess colours of every allowed word is computed and stored in a table. This is then loaded.
 
