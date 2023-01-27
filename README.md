@@ -1,5 +1,7 @@
 # wordle-solve-cpp
 
+![SCreenshot of the program in the terminal](https://user-images.githubusercontent.com/55091936/215071721-ca0ef803-582c-42bb-97f6-5e3052ab8990.png)
+
 C++ solver for Wordle that I wrote out of boredom. Main features include:
 
 * Fast (nearly instant guess generation in most scenarios)
