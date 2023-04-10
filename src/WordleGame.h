@@ -19,7 +19,9 @@ public:
     std::string get_best_word() const;
     std::string get_solved_word();
     void filter_words(std::string word, const std::vector<int> &results);
+    double compute_board_entropy(int word, int board) const;
     double compute_entropy(int word) const;
+    double compute_sd(int word) const;
     
     std::vector<bool> get_solved() const;
 

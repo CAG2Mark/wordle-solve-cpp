@@ -105,7 +105,8 @@ void WordleUI::print_board(size_t highlighted) {
             size_t corner_y = PAD_Y + (board_height + 2 * PAD_Y) * i;
 
             for (size_t k = 0; k < guesses.size(); ++k) {
-                if (k > (size_t) solved_turn[board]) break;
+                if (k > (size_t)solved_turn[board])
+                    break;
 
                 const string &guess = guesses[k];
                 auto &log = results_log[board];
@@ -113,8 +114,7 @@ void WordleUI::print_board(size_t highlighted) {
                     if (board == highlighted && k == guesses.size() - 1) {
                         out[corner_y + k][corner_x + l] =
                             colorize({ guess[l] }, FG_BLACK, BG_WHITE, true);
-                    }
-                    else if (k == (size_t) solved_turn[board]) {
+                    } else if (k == (size_t)solved_turn[board]) {
                         out[corner_y + k][corner_x + l] =
                             colorize({ guess[l] }, BACKGROUND::BG_GREEN, true);
                     } else if (log.size() > k && log[k][l] - '0') {
@@ -154,7 +154,8 @@ void clear_input_line(int length) {
 }
 
 bool valid_res(string inp) {
-    if (inp.size() != 5) return false;
+    if (inp.size() != 5)
+        return false;
 
     for (size_t i = 0; i < inp.size(); ++i) {
         if (inp[i] < '0' || inp[i] > '2')
@@ -178,7 +179,8 @@ void WordleUI::run() {
 
         for (size_t i = 0; i < solved.size(); ++i) {
             bool b = solved[i];
-            if (!b || solved_turn[i] != -1) continue;
+            if (!b || solved_turn[i] != -1)
+                continue;
 
             solved_turn[i] = turn;
         }
@@ -196,10 +198,14 @@ void WordleUI::run() {
         while (true) {
             i %= boards;
 
-            for (size_t j = 0; j < boards && solved[i]; i = (i + 1) % boards, ++j) {};
+            for (size_t j = 0; j < boards && solved[i];
+                 i = (i + 1) % boards, ++j) { };
 
             clear_board();
-            cout << "\nGUESS: " << word << " (Entropy: " << game.compute_entropy(data->wtoi(word)) << ")";
+            cout << "\nGUESS: " << word
+                 << " (Entropy: " << game.compute_entropy(data->wtoi(word))
+                 << " bits, SD: " << game.compute_sd(data->wtoi(word))
+                 << ")";
             print_spaces(20);
             cout << "\n";
             last_height += 2;
@@ -215,13 +221,15 @@ void WordleUI::run() {
 
             if (res == "a") {
                 --i;
-                for (; i < boards && solved[i]; i = (i - 1) % boards);
+                for (; i < boards && solved[i]; i = (i - 1) % boards)
+                    ;
                 continue;
             }
 
             if (res == "d") {
                 ++i;
-                for (; i < boards && solved[i]; i = (i + 1) % boards);
+                for (; i < boards && solved[i]; i = (i + 1) % boards)
+                    ;
                 continue;
             }
 
@@ -254,7 +262,8 @@ void WordleUI::run() {
         game.filter_words(word, results);
 
         for (size_t i = 0; i < results.size(); ++i) {
-            if (results[i] == 242) solved_turn[i] = turn;
+            if (results[i] == 242)
+                solved_turn[i] = turn;
         }
 
         ++turn;

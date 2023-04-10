@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <math.h>
+#include <tuple>
 
 const std::string BEST_START = "slate";
 using namespace std;
@@ -18,13 +19,57 @@ WordleGame::WordleGame(int num_boards, const WordleData *data) :
     }
 }
 
-double WordleGame::compute_entropy(int word) const {
+double WordleGame::compute_board_entropy(int word, int board) const {
     auto &guess_table = data->get_guess_table();
 
     double entropy = 0;
-    for (const auto &s : boards) {
+    const auto &s = boards[board];
+
+    int total = 0;
+    int arrangs[243] = { 0 };
+    for (int ans : s) {
+        int res = guess_table[word][ans];
+        if (res >= 243) {
+            cout << "ERROR!\n";
+        }
+        ++arrangs[res];
+    }
+    total += s.size();
+
+    for (int i = 0; i < 243; ++i) {
+        if (arrangs[i] == 0)
+            continue;
+        double p = (double)arrangs[i] / total;
+        double bits = -log2(p);
+        double val = p * bits;
+
+        entropy += val;
+    }
+
+    return entropy;
+}
+
+double WordleGame::compute_entropy(int word) const {
+    double entropy = 0;
+    for (size_t i = 0; i < boards.size(); ++i) {
+        entropy += compute_board_entropy(word, i);
+    }
+    return entropy;
+}
+
+double WordleGame::compute_sd(int word) const {
+    auto &guess_table = data->get_guess_table();
+
+    double var = 0;
+    for (size_t i = 0; i < boards.size(); ++i) {
+        double en = compute_board_entropy(word, i);
+
+        double v = 0;
         int total = 0;
         int arrangs[243] = { 0 };
+
+        const auto &s = boards[i];
+
         for (int ans : s) {
             int res = guess_table[word][ans];
             if (res >= 243) {
@@ -38,10 +83,15 @@ double WordleGame::compute_entropy(int word) const {
             if (arrangs[i] == 0)
                 continue;
             double p = (double)arrangs[i] / total;
-            entropy -= p * log2(p);
+            double bits = -log2(p);
+            double val = (bits - en);
+
+            v += arrangs[i] * val * val;
         }
+        v /= total;
+        var += v;
     }
-    return entropy;
+    return sqrt(var);
 }
 
 string WordleGame::get_best_word() const {

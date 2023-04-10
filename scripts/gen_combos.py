@@ -1,4 +1,7 @@
 from collections import defaultdict
+import threading
+
+THREADS = 8
 
 def guess_word(guess, answer):
     d = defaultdict(lambda: 0)
