@@ -21,9 +21,9 @@ public:
     int size() const;
     int size_guess() const;
 
-    int get_guess(int w1, int w2) const;
+    int get_guess(int guess, int actual) const;
     const std::vector<std::vector<int>> &get_guess_table() const;
-    int get_guess(const std::string &w1, const std::string &w2) const;
+    int get_guess(const std::string &guess, const std::string &actual) const;
 
     std::string itow(int i) const;
     int wtoi(const std::string &word) const;
