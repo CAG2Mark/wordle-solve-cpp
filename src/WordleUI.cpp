@@ -30,11 +30,15 @@ enum BACKGROUND {
     BG_BLUE = 44,
     BG_MAGNETA = 45,
     BG_CYAN = 46,
-    BG_WHITE = 47
+    BG_WHITE = 47,
+    HBG_BLACK = 100,
+    HBG_GREEN = 102,
+    HBG_YELLOW = 103
 };
 
 WordleUI::WordleUI(int boards, int cols, const WordleData *data) :
     game(boards, data),
+    autofilled(boards, false),
     results_log(boards, std::vector<std::string>()),
     solved_turn(boards, -1) {
     this->data = data;
@@ -113,10 +117,28 @@ void WordleUI::print_board(size_t highlighted) {
                 auto &log = results_log[board];
                 for (size_t l = 0; l < guess.size(); ++l) {
                     if (board == highlighted && k == guesses.size() - 1) {
-                        out[corner_y + k][corner_x + l] =
-                            colorize({ guess[l] }, FG_BLACK, BG_WHITE, true);
-                    }
-                    else if (k == (size_t) solved_turn[board]) {
+                        if (log.size() > k && log[k][l] - '0') {
+                            out[corner_y + k][corner_x + l] =
+                                colorize({ guess[l] },
+                                    log[k][l] == '1' ? FOREGROUND::FG_YELLOW
+                                                     : FOREGROUND::FG_GREEN,
+                                    BG_WHITE, true);
+                        } else {
+                            out[corner_y + k][corner_x + l] = colorize(
+                                { guess[l] }, FG_BLACK, BG_WHITE, true);
+                        }
+                    } else if (autofilled[board] && k == guesses.size() - 1) {
+                        if (log.size() > k && log[k][l] - '0') {
+                            out[corner_y + k][corner_x + l] =
+                                colorize({ guess[l] },
+                                    FG_WHITE,
+                                    log[k][l] == '1' ? BACKGROUND::HBG_YELLOW
+                                                     : BACKGROUND::HBG_GREEN, false);
+                        } else {
+                            out[corner_y + k][corner_x + l] = colorize(
+                                { guess[l] }, FG_WHITE, HBG_BLACK, false);
+                        }
+                    } else if (k == (size_t)solved_turn[board]) {
                         out[corner_y + k][corner_x + l] =
                             colorize({ guess[l] }, BACKGROUND::BG_GREEN, true);
                     } else if (log.size() > k && log[k][l] - '0') {
@@ -196,9 +218,12 @@ void WordleUI::run() {
         vector<int> definite_i = game.get_definite_results(data->wtoi(word));
         // vector<string> definite(definite_i.size(), "");
         for (size_t i = 0; i < definite_i.size(); ++i) {
-            if (definite_i[i] == -1)
+            if (definite_i[i] == -1) {
+                autofilled[i] = false;
                 continue;
+            }
 
+            autofilled[i] = true;
             results[i] = definite_i[i];
             results_log[i].push_back(guess_to_string(definite_i[i]));
             entered[i] = true;
@@ -209,14 +234,13 @@ void WordleUI::run() {
         while (true) {
             i %= boards;
 
-            for (size_t j = 0; j < boards && definite_i[i] != -1;
+            for (size_t j = 0; j < boards && (definite_i[i] != -1 || solved[i]);
                  i = (i + 1) % boards, ++j) { };
 
             clear_board();
             cout << "\nGUESS: " << word
                  << " (Entropy: " << game.compute_entropy(data->wtoi(word))
-                 << " bits, SD: " << game.compute_sd(data->wtoi(word))
-                 << ")";
+                 << " bits, SD: " << game.compute_sd(data->wtoi(word)) << ")";
             print_spaces(20);
             cout << "\n";
             last_height += 2;
@@ -232,14 +256,16 @@ void WordleUI::run() {
 
             if (res == "a") {
                 --i;
-                for (int j = 0; j < boards && i < boards && definite_i[i] != -1; i = (i - 1) % boards, ++j)
+                for (size_t j = 0; j < boards && i < boards && (definite_i[i] != -1 || solved[i]);
+                     i = (i - 1) % boards, ++j)
                     ;
                 continue;
             }
 
             if (res == "d") {
                 ++i;
-                for (int j = 0; j < boards && i < boards && definite_i[i] != -1; i = (i + 1) % boards, ++j)
+                for (size_t j = 0; j < boards && i < boards && (definite_i[i] != -1 || solved[i]);
+                     i = (i + 1) % boards, ++j)
                     ;
                 continue;
             }

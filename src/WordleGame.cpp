@@ -146,7 +146,7 @@ vector<int> WordleGame::get_definite_results(int guess) {
     vector<int> ret(boards.size(), -1);
 
     for (size_t i = 0; i < boards.size(); ++i) {
-        if (compute_entropy(guess, i))
+        if (compute_entropy(guess, i) || solved[i])
             continue;
         ret[i] = data->get_guess(guess, *boards[i].begin());
     }

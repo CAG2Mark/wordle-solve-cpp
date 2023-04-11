@@ -12,6 +12,7 @@ class WordleUI {
     const WordleData *data;
 
     std::vector<std::string> guesses;
+    std::vector<bool> autofilled;
     std::vector<std::vector<std::string>> results_log;
 
     std::vector<int> solved_turn;

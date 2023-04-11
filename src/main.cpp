@@ -1,5 +1,4 @@
 #include "WordleData.h"
-#include "WordleGame.h"
 #include "WordleUI.h"
 #include <iostream>
 using namespace std;
