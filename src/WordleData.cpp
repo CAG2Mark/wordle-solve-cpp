@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -12,6 +13,15 @@ int guess_to_int(const string &guess) {
     for (int i = guess.size() - 1; i >= 0; --i) {
         ret += (guess[i] - '0') * pow;
         pow *= 3;
+    }
+    return ret;
+}
+
+string guess_to_string(int guess) {
+    string ret = "";
+    for (int i = 0; i < 5; ++i) {
+        ret = to_string(guess % 3) + ret;
+        guess /= 3;
     }
     return ret;
 }
@@ -41,7 +51,6 @@ WordleData::WordleData(string guess_words_file, string all_words_file, string gu
     words_size = i;
 
     ifstream guess_table_f(guess_table_file);
-
     vector<vector<string>> vals;
 
     while (getline(guess_table_f, line)) {

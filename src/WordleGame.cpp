@@ -19,7 +19,7 @@ WordleGame::WordleGame(int num_boards, const WordleData *data) :
     }
 }
 
-double WordleGame::compute_board_entropy(int word, int board) const {
+double WordleGame::compute_entropy(int word, int board) const {
     auto &guess_table = data->get_guess_table();
 
     double entropy = 0;
@@ -52,7 +52,7 @@ double WordleGame::compute_board_entropy(int word, int board) const {
 double WordleGame::compute_entropy(int word) const {
     double entropy = 0;
     for (size_t i = 0; i < boards.size(); ++i) {
-        entropy += compute_board_entropy(word, i);
+        entropy += compute_entropy(word, i);
     }
     return entropy;
 }
@@ -62,7 +62,7 @@ double WordleGame::compute_sd(int word) const {
 
     double var = 0;
     for (size_t i = 0; i < boards.size(); ++i) {
-        double en = compute_board_entropy(word, i);
+        double en = compute_entropy(word, i);
 
         double v = 0;
         int total = 0;
@@ -78,26 +78,32 @@ double WordleGame::compute_sd(int word) const {
             ++arrangs[res];
         }
         total += s.size();
+    
 
-        for (int i = 0; i < 243; ++i) {
-            if (arrangs[i] == 0)
-                continue;
-            double p = (double)arrangs[i] / total;
-            double bits = -log2(p);
+    for (int i = 0; i < 243; ++i) {
+        if (arrangs[i] == 0)
+            continue;
+        double p = (double)arrangs[i] / total;
+        double bits = -log2(p);
             double val = (bits - en);
 
             v += arrangs[i] * val * val;
-        }
+    }
         v /= total;
         var += v;
     }
+
     return sqrt(var);
 }
 
-string WordleGame::get_best_word() const {
+int WordleGame::get_best_word() {
     if (first) {
-        return BEST_START;
+        return data->wtoi(BEST_START);
     }
+
+    int solved = get_solved_word();
+    if (solved != -1)
+        return solved;
 
     double max_entropy = -1;
     int best_word = -1;
@@ -131,10 +137,24 @@ string WordleGame::get_best_word() const {
         best_word = i;
     }
 
-    return data->itow(best_word);
+    return best_word;
 }
 
-string WordleGame::get_solved_word() {
+// when entropy is 0 for a guess, it is always possible to
+// know the result of the guess.
+vector<int> WordleGame::get_definite_results(int guess) {
+    vector<int> ret(boards.size(), -1);
+
+    for (size_t i = 0; i < boards.size(); ++i) {
+        if (compute_entropy(guess, i))
+            continue;
+        ret[i] = data->get_guess(guess, *boards[i].begin());
+    }
+
+    return ret;
+}
+
+int WordleGame::get_solved_word() {
     for (size_t i = 0; i < boards.size(); ++i) {
         auto &s = boards[i];
 
@@ -145,11 +165,11 @@ string WordleGame::get_solved_word() {
 
         solved[i] = true;
 
-        string ret = data->itow(*s.begin());
+        int ret = *s.begin();
 
         return ret;
     }
-    return "";
+    return -1;
 }
 
 void WordleGame::filter_words(std::string word, const vector<int> &results) {

@@ -16,12 +16,15 @@ private:
 public:
     WordleGame(int num_boards, const WordleData *data);
 
-    std::string get_best_word() const;
-    std::string get_solved_word();
+    int get_best_word();
+    int get_solved_word();
     void filter_words(std::string word, const std::vector<int> &results);
     double compute_board_entropy(int word, int board) const;
     double compute_entropy(int word) const;
+    double compute_entropy(int word, int board) const;
     double compute_sd(int word) const;
+    
+    std::vector<int> get_definite_results(int guess);
     
     std::vector<bool> get_solved() const;
 
