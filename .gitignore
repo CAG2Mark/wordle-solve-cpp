@@ -1,3 +1,5 @@
 guess_table
 .cache/*
 .vscode/*
+*.o
+build/*

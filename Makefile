@@ -23,3 +23,7 @@ json: clean
 
 clean:
 	rm -rf $(BIN) $(OBJ)
+
+gencombos:
+	$(CC) scripts/gen_combos.cpp -o scripts/gen $(CFLAGS)
+	scripts/gen
