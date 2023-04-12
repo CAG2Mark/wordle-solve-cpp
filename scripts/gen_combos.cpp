@@ -40,7 +40,7 @@ array<int, 5> guess_word(const string &guess, const string &answer) {
         ++d[c - 'a'];
     }
 
-    for (int i = 0; i < answer.size(); ++i) {
+    for (size_t i = 0; i < answer.size(); ++i) {
         char c = answer[i];
         if (guess[i] != c) continue;
         
@@ -48,7 +48,7 @@ array<int, 5> guess_word(const string &guess, const string &answer) {
         --d[c - 'a'];
     }
 
-    for (int i = 0; i < guess.size(); ++i) {
+    for (size_t i = 0; i < guess.size(); ++i) {
         char c = guess[i];
 
         if (ret[i] == 2) 

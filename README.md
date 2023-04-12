@@ -22,7 +22,8 @@ Run:
 git clone https://github.com/CAG2Mark/wordle-solve-cpp
 cd wordle-solve-cpp
 
-python3 scripts/gen_combos.py # Note: You can use pypy3 to have this run faster.
+make gencombos
+scripts/gen
 
 make # Or make -j4 to use four threads
 

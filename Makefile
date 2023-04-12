@@ -26,4 +26,3 @@ clean:
 
 gencombos:
 	$(CC) scripts/gen_combos.cpp -o scripts/gen $(CFLAGS)
-	scripts/gen
